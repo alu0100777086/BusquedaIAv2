@@ -5,6 +5,7 @@
  */
 package ui;
 
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
@@ -65,7 +66,7 @@ public class Board extends JPanel implements ActionListener {
         
         timer = new Timer(DELAY, this);
         
-        setPreferredSize(new Dimension(530, 530));
+        //setPreferredSize(new Dimension(530, 530));
     }
     
     public void loadMap() throws URISyntaxException {
@@ -99,6 +100,10 @@ public class Board extends JPanel implements ActionListener {
     
     public void resizethem(){
         Tablero = new map(Application.filas, Application.columnas);
+        Container c = this.getParent();
+        int size = Math.min(c.getHeight(), c.getWidth());
+        size = Math.max(530, size);
+        resizeimgs(size);
     }
     
     public void generaternd(int n){
@@ -108,6 +113,21 @@ public class Board extends JPanel implements ActionListener {
     
     public void generate(int x, int y, int type, int ori){
         Tablero.generate(x, y, type, ori);
+        repaint();
+    }
+    
+    @Override
+    public Dimension getPreferredSize() {
+        Container c = this.getParent();
+        int size = Math.min(c.getHeight(), c.getWidth());
+        size = Math.max(530, size);
+        Dimension d = new Dimension(size,size);
+        resizeimgs(size);
+        return d;
+    }
+    
+    public void resizeimgs(int tam){
+        Tablero.resizeimages(tam);
         repaint();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

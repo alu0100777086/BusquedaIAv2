@@ -30,8 +30,8 @@ public class map {
     private BufferedImage obstacle13;
     private int filas;
     private int columnas;
-    private final int alto = 530;
-    private final int ancho = 530;
+    private int alto = 530;
+    private int ancho = 530;
     
     public map(int fil, int col){
         initMap(fil, col);
@@ -253,5 +253,118 @@ public class map {
                 map[i][j+1] = obstacle13;
             }
         }
+    }
+    
+    public void resizeimages(int tam){
+        alto = ancho = tam;
+        BufferedImage sueloaux = suelo;
+        BufferedImage robotaux = robot;
+        BufferedImage obstacle0aux = obstacle0;
+        BufferedImage obstacle10aux = obstacle10;
+        BufferedImage obstacle11aux = obstacle11;
+        BufferedImage obstacle12aux = obstacle12;
+        BufferedImage obstacle13aux = obstacle13;
+        
+        
+        //Reload images for no quality lose
+        try {
+            try {
+                suelo = ImageIO.read(new File(getClass().getResource("/ui/Suelo0.png").toURI()));
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            try {
+                robot = ImageIO.read(new File(getClass().getResource("/ui/Robot0.png").toURI()));
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            try {
+                obstacle10 = ImageIO.read(new File(getClass().getResource("/ui/Obstacle10.png").toURI()));
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            try {
+                obstacle11 = ImageIO.read(new File(getClass().getResource("/ui/Obstacle11.png").toURI()));
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            try {
+                obstacle12 = ImageIO.read(new File(getClass().getResource("/ui/Obstacle12.png").toURI()));
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            try {
+                obstacle13 = ImageIO.read(new File(getClass().getResource("/ui/Obstacle13.png").toURI()));
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            try {
+                obstacle0 = ImageIO.read(new File(getClass().getResource("/ui/Obstacle0.png").toURI()));
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        //resize them to the new size
+        suelo = resize(suelo);
+        robot = resize(robot);
+        obstacle0 = resize(obstacle0);
+        obstacle10 = resize(obstacle10);
+        obstacle11 = resize(obstacle11);
+        obstacle12 = resize(obstacle12);
+        obstacle13 = resize(obstacle13);
+        
+        
+        //Sustituye
+        for (int i=0;i<filas;i++)
+            for (int j=0;j<columnas;j++){
+                if (map[i][j] == sueloaux)
+                    map[i][j] = suelo;
+                else if (map[i][j] == robotaux)
+                    map[i][j] = robot;
+                else if (map[i][j] == obstacle0aux)
+                    map[i][j] = obstacle0;
+                else if (map[i][j] == obstacle10aux)
+                    map[i][j] = obstacle10;
+                else if (map[i][j] == obstacle11aux)
+                    map[i][j] = obstacle11;
+                else if (map[i][j] == obstacle12aux)
+                    map[i][j] = obstacle12;
+                else if (map[i][j] == obstacle13aux)
+                    map[i][j] = obstacle13;
+            }
     }
 }

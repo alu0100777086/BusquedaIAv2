@@ -5,10 +5,8 @@
  */
 package ui;
 
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
-import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -277,8 +275,8 @@ public class Application extends javax.swing.JFrame {
         jLayeredPane1.setLayout(new GridBagLayout());
 
         jLayeredPane1.add(jPanel2);
-        
-        //jLayeredPane1.setMinimumSize(new Dimension(530,530));
+                
+        jLayeredPane1.setMinimumSize(new Dimension(530,530));
         
         jTextField2.setText("Columnas");
 
@@ -389,7 +387,7 @@ public class Application extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLayeredPane1)
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
