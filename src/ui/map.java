@@ -6,6 +6,7 @@
 package ui;
 
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,11 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -200,6 +206,24 @@ public class map {
         return 0;
     }
     
+    //SIN IMPLEMENTAR
+    
+    public int getobsi(){
+        for (int i=0;i<filas;i++)
+            for (int j=0;j<columnas;j++)
+                if (map[i][j] == robot)
+                    return i;
+        return 0;
+    }
+    
+    public int getobsj(){
+        for (int i=0;i<filas;i++)
+            for (int j=0;j<columnas;j++)
+                if (map[i][j] == robot)
+                    return j;
+        return 0;
+    }
+    
     public int getj(){
         for (int i=0;i<filas;i++)
             for (int j=0;j<columnas;j++)
@@ -366,5 +390,51 @@ public class map {
                 else if (map[i][j] == obstacle13aux)
                     map[i][j] = obstacle13;
             }
+    }
+    
+    public void displaybot() {
+        JTextField field1 = new JTextField("000");
+        JTextField field2 = new JTextField("000");
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("ROBOT X:"));
+        panel.add(field1);
+        panel.add(new JLabel("ROBOT Y:"));
+        panel.add(field2);
+        int result = JOptionPane.showConfirmDialog(null, panel, "Coordenadas del robot",
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            displayobs(Integer.parseInt(field1.getText()), Integer.parseInt(field2.getText()));
+        } else {
+            System.out.println("Cancelled");
+        }
+    }
+    
+    private void displayobs(int botx, int boty) {
+        JTextField field1 = new JTextField("000");
+        JTextField field2 = new JTextField("000");
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("OBSTA X:"));
+        panel.add(field1);
+        panel.add(new JLabel("OBSTA Y:"));
+        panel.add(field2);
+        int result = JOptionPane.showConfirmDialog(null, panel, "Coordenadas del obstaculo",
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            changepos(botx, boty, Integer.parseInt(field1.getText()), Integer.parseInt(field2.getText()));
+        } else {
+            System.out.println("Cancelled");
+        }
+    }
+    
+    private void changepos(int botx, int boty, int objx, int objy){
+        int i, j;
+        i = geti();
+        j = getj();
+        map[i][j] = suelo;
+        map[botx][boty] = robot;
+        /*i = getobsi();
+        j = getobsj();
+        map[i][j] = suelo;
+        map[objx][objy] = object;*/
     }
 }

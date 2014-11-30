@@ -103,6 +103,7 @@ public class Board extends JPanel implements ActionListener {
         Container c = this.getParent();
         int size = Math.min(c.getHeight(), c.getWidth());
         size = Math.max(530, size);
+        Tablero.displaybot();
         resizeimgs(size);
     }
     
