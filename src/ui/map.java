@@ -15,7 +15,6 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,18 +25,21 @@ import javax.swing.JTextField;
  * @author marcos
  */
 public class map {
-    private BufferedImage map[][];
-    private BufferedImage robot;
-    private BufferedImage suelo;
-    private BufferedImage obstacle0;
-    private BufferedImage obstacle10;
-    private BufferedImage obstacle11;
-    private BufferedImage obstacle12;
-    private BufferedImage obstacle13;
-    private int filas;
-    private int columnas;
-    private int alto = 530;
-    private int ancho = 530;
+    public BufferedImage map[][];
+    public BufferedImage robot;
+    public BufferedImage suelo;
+    public BufferedImage obstacle0;
+    public BufferedImage obstacle10;
+    public BufferedImage obstacle11;
+    public BufferedImage obstacle12;
+    public BufferedImage obstacle13;
+    public BufferedImage polvo;
+    public int filas;
+    public int columnas;
+    public int alto = 530;
+    public int ancho = 530;
+    public Pathfinding AStar;
+    public ListAStar solucion = null;
     
     public map(int fil, int col){
         initMap(fil, col);
@@ -49,6 +51,15 @@ public class map {
         columnas = col;
         
         //Load all images in their variables
+        try {
+            try {
+                polvo = ImageIO.read(new File(getClass().getResource("/ui/polvo.png").toURI()));
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             try {
                 suelo = ImageIO.read(new File(getClass().getResource("/ui/Suelo0.png").toURI()));
@@ -127,13 +138,14 @@ public class map {
         obstacle11 = resize(obstacle11);
         obstacle12 = resize(obstacle12);
         obstacle13 = resize(obstacle13);
+        polvo = resize(polvo);
         
         //Draw the map
         map = new BufferedImage [filas+1][columnas+1];
         for (int i=0;i<filas;i++)
             for (int j=0;j<columnas;j++)
                 map[i][j] = suelo;
-        map[filas-1][0] = robot;
+        map[0][0] = robot;
     }
     
     public BufferedImage resize(BufferedImage im){
@@ -185,17 +197,63 @@ public class map {
         map[i+1][j] = robot;
     }
     
-    public void move(){
-        int i = geti();
-        int j = getj();
-        if(j+1<columnas && i==filas-1)
-            moveright();
-        else if(i>0 && j==columnas-1)
-            moveup();
-        else if(j>0)
-            moveleft();
-        else if(i+1<columnas)
-            movedown();
+    
+    public void mostrarCaminoPorConsola(int x, int y){
+
+            System.out.print("(");
+            System.out.print(x);
+            System.out.print(",");
+            System.out.print(y);
+            System.out.print(")");
+            System.out.print("-> ");
+
+    }
+    
+    public void move()
+    {
+//        int i = geti();
+//        int j = getj();
+//        if(j+1<columnas && i==filas-1)
+//            moveright();
+//        else if(i>0 && j==columnas-1)
+//            moveup();
+//        else if(j>0)
+//            moveleft();
+//        else if(i+1<columnas)
+//            movedown();
+        Pathfinding AStar = new Pathfinding(this);
+        ListAStar solucion = null;
+        solucion = AStar.startAStar();
+        if(solucion == null){
+
+            JOptionPane.showMessageDialog(null, "No existe una solución posible");
+            System.exit(0);
+        }
+        else
+        {
+            if(!solucion.isEmpty())
+            {
+
+                    Node aux = solucion.extract();
+
+                    int x = aux.getI();
+                    int y = aux.getJ();
+
+                    mostrarCaminoPorConsola(x,y);
+                    
+                    for(int j=0; j < filas; j++)
+                    {
+                            for(int k=0; k < columnas; k++)
+                            {
+                                if(sprite(j,k) == robot)
+                                {
+                                    map[j][k] = suelo;
+                                }
+                            }
+                    }
+                    map[x][y] = robot;
+            }
+        }
     }
     
     public int geti(){
@@ -211,7 +269,7 @@ public class map {
     public int getobsi(){
         for (int i=0;i<filas;i++)
             for (int j=0;j<columnas;j++)
-                if (map[i][j] == robot)
+                if (map[i][j] == polvo)
                     return i;
         return 0;
     }
@@ -219,7 +277,7 @@ public class map {
     public int getobsj(){
         for (int i=0;i<filas;i++)
             for (int j=0;j<columnas;j++)
-                if (map[i][j] == robot)
+                if (map[i][j] == polvo)
                     return j;
         return 0;
     }
@@ -288,12 +346,23 @@ public class map {
         BufferedImage obstacle11aux = obstacle11;
         BufferedImage obstacle12aux = obstacle12;
         BufferedImage obstacle13aux = obstacle13;
+        BufferedImage polvoaux = polvo;
         
         
         //Reload images for no quality lose
         try {
             try {
                 suelo = ImageIO.read(new File(getClass().getResource("/ui/Suelo0.png").toURI()));
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            try {
+                polvo = ImageIO.read(new File(getClass().getResource("/ui/polvo.png").toURI()));
             } catch (URISyntaxException ex) {
                 Logger.getLogger(map.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -370,6 +439,7 @@ public class map {
         obstacle11 = resize(obstacle11);
         obstacle12 = resize(obstacle12);
         obstacle13 = resize(obstacle13);
+        polvo = resize(polvo);
         
         
         //Sustituye
@@ -389,6 +459,8 @@ public class map {
                     map[i][j] = obstacle12;
                 else if (map[i][j] == obstacle13aux)
                     map[i][j] = obstacle13;
+                else if (map[i][j] == polvoaux)
+                    map[i][j] = polvo;
             }
     }
     
@@ -413,9 +485,9 @@ public class map {
         JTextField field1 = new JTextField("000");
         JTextField field2 = new JTextField("000");
         JPanel panel = new JPanel(new GridLayout(0, 1));
-        panel.add(new JLabel("OBSTA X:"));
+        panel.add(new JLabel("Polvo X:"));
         panel.add(field1);
-        panel.add(new JLabel("OBSTA Y:"));
+        panel.add(new JLabel("Polvo Y:"));
         panel.add(field2);
         int result = JOptionPane.showConfirmDialog(null, panel, "Coordenadas del obstaculo",
             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -432,9 +504,11 @@ public class map {
         j = getj();
         map[i][j] = suelo;
         map[botx][boty] = robot;
-        /*i = getobsi();
+        i = getobsi();
         j = getobsj();
         map[i][j] = suelo;
-        map[objx][objy] = object;*/
+        map[objx][objy] = polvo;
     }
 }
+
+
